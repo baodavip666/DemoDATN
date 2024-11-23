@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{admin/layout}">
+<title>Tạo Sản Phẩm Chi Tiết Mới</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<body>
+<section layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-uppercase font-weight-bold">Thêm sản phẩm chi tiết mới</h4>
+                    <form class="forms-sample" style="margin-top: 20px" method="post" th:object="${addCTSP}" th:action="@{/admin/san-pham/san-pham-chi-tiet/add/{id}(id=${idSP})}"   enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <span style="margin-top: 5px;">Tên Sản Phẩm</span>
+                                <input id="mactsp2" name="mactsp2"
+                                       th:value="${addCTSP.sanPham.ten}"
+                                       class="form-control">
+                                <div id="mactsperror2" class="text-danger"></div>
+
+                                <span style="margin-top: 5px;">Đơn giá</span>
+                                <input id="dongiaspct2" name="donGia2"
+                                       th:value="${#numbers.formatDecimal(addCTSP.donGia, 0, 'COMMA', 0, 'POINT')}"
+                                       class="form-control">
+
+
+                                <span style="margin-top: 5px;">Số lượng</span>
+                                <input name="soluongsua2"
+                                       th:value="${addCTSP.soLuong}"
+                                       class="form-control">
+
+                                <span style="margin-top: 5px;">Nhà Sản Xuất</span>
+                                <select name="nhaSanXuat2" class="form-select">
+                                    <option th:each="nhaSanXuat : ${nhaSanXuatLists}" th:value="${nhaSanXuat.id}">
+                                        [[${nhaSanXuat.ten}]]
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <span style="margin-top: 5px;">Chất Liệu</span>
+                                <select id="chatLieuIdspct2" name="chatLieuId2"
+                                        class="form-select">
+                                    <option th:each="chatLieu:${chatLieuLists}"
+                                            th:value="${chatLieu.id}">
+                                        [[${chatLieu.ten}]]
+                                    </option>
+                                </select>
+
+
+                                <span style="margin-top: 5px;">Màu Sắc</span>
+                                <select name="mauSacId2"
+                                        class="form-select">
+                                    <option th:each="colors:${colors}"
+                                            th:value="${colors.id}">
+                                        [[${colors.ten}]]
+                                    </option>
+                                </select>
+
+                                <span style="margin-top: 5px;">Kích cỡ</span>
+                                <select name="kichCoId2"
+                                        class="form-select">
+                                    <option th:each="sizes:${sizes}"
+                                            th:value="${sizes.id}">
+                                        [[${sizes.ten}]]
+                                    </option>
+                                </select>
+                                <span style="margin-top: 5px;">Xuất Xứ</span>
+                                <select id="xuatXuIdspct2" name="xuatXu2"
+                                        class="form-select">
+                                    <option th:each="xuatxu:${xuatXuLists}"
+                                            th:value="${xuatxu.id}">
+                                        [[${xuatxu.ten}]]
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="mt-2">
+                                <input type="file" name="files" id="fileInput" multiple>
+                                <div id="preview"></div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary mr-2 mt-2" type="submit">Thêm mới</button>
+                        <a th:href="@{/admin/san-pham/view}" class="btn btn-secondary mt-2">Quay lại</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
+    <script th:inline="javascript">
+        var messageeroradd = [[${messageeroradd}]];
+
+
+        if (messageeroradd != null) {
+            toastr.warning(messageeroradd)
+        }
+
+    </script>
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function () {
+            const preview = document.getElementById('preview');
+            preview.innerHTML = ''; // Xóa preview cũ
+            Array.from(this.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '100px';
+                    img.style.height = '100px';
+                    img.style.objectFit = 'cover';
+                    img.style.margin = '5px';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+</section>
+</body>
+</html>
